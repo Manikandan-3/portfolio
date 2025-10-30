@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manikandan R - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; }
+    body {
+      background: radial-gradient(1200px 600px at 10% 10%, #07102a, transparent 20%),
+                  radial-gradient(800px 400px at 90% 90%, #00122b, transparent 20%),
+                  linear-gradient(180deg, #020617 0%, #07102a 100%);
+      color: #e6eef8;
+      padding: 28px;
+    }
+    .card {
+      max-width: 980px;
+      margin: 24px auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 40px rgba(2,6,23,0.7);
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+    }
+
+    .assistant-bubble {
+      width: 160px; height: 160px; border-radius: 50%;
+      background: conic-gradient(from 120deg at 50% 50%, rgba(56,189,248,0.12), rgba(99,102,241,0.08));
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 8px 30px rgba(29,78,216,0.12);
+      position: relative; overflow: hidden;
+    }
+    .assistant-glow {
+      position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0.9; filter: blur(26px);
+      background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.45), transparent 18%),
+                  radial-gradient(circle at 70% 70%, rgba(56,189,248,0.30), transparent 18%);
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px;
+      cursor: pointer; user-select: none; border: 1px solid rgba(255,255,255,0.045);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      font-size: 14px;
+    }
+    .btn.primary { background: linear-gradient(180deg, rgba(56,189,248,0.12), rgba(99,102,241,0.08)); }
+
+    .content h1 { font-size: 20px; margin-bottom: 4px; }
+    .meta { font-size: 13px; color: rgba(230,238,248,0.7); margin-bottom: 14px; }
+    .sections { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .chip {
+      padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03); font-size: 13px; cursor: pointer;
+    }
+    .chip.active {
+      background: linear-gradient(90deg, #3b82f6, #06b6d4); color: #021428; border: none; font-weight: 600;
+    }
+    .panel {
+      background: rgba(255,255,255,0.015); border-radius: 12px; padding: 14px;
+      margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.02);
+    }
+    .skills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .skill {
+      padding: 8px 10px; border-radius: 8px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      font-size: 13px; border: 1px solid rgba(255,255,255,0.02);
+    }
+    .project-title { font-weight: 700; font-size: 15px; }
+    .contact-row { display: flex; gap: 12px; align-items: center; font-size: 14px; }
+    .contact-row .label { min-width: 80px; color: rgba(230,238,248,0.75); }
+
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center;
+      z-index: 1000; padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .pdf-container {
+      width: 90%; max-width: 1000px; height: 95vh; background: white; border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden;
+    }
+    .pdf-frame {
+      width: 100%; height: 100%; border: none;
+    }
+    .close-modal {
+      position: absolute; top: 15px; right: 15px; background: #ef4444; color: white;
+      width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; font-weight: bold; font-size: 18px; z-index: 10;
+    }
+
+    @media (max-width: 880px) {
+      .card { grid-template-columns: 1fr; padding: 18px; }
+      .assistant-bubble { width: 92px; height: 92px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- LEFT: Assistant -->
+    <div class="profile" style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div class="assistant-bubble" id="assistantBubble">
+        <div class="assistant-glow"></div>
+        <div style="z-index:2;text-align:center;">
+          <div style="font-size:18px;font-weight:700;">WELCOME !</div>
+          <div style="font-size:11px;margin-top:6px;color:rgba(230,238,248,0.78);">To my profile</div>
+        </div>
+      </div>
+      <div style="width:100%;text-align:center;">
+        <div style="font-weight:700;">Manikandan R</div>
+        <div style="font-size:12px;color:rgba(230,238,248,0.72);margin-top:6px;">Trichy, Tamil Nadu</div>
+      </div>
+      <div style="width:100%;">
+        <div style="display:flex;gap:8px;">
+          <div class="btn primary" id="viewResume">View Resume</div>
+        </div>
+        <div style="margin-top:10px;font-size:13px;color:#cfe9ff;" id="status">Status: Ready</div>
+      </div>
+      <div style="width:100%;margin-top:12px;">
+        <div style="background:rgba(0,0,0,0.2);padding:12px;border-radius:10px;font-size:13px;border:1px solid rgba(255,255,255,0.02);">
+          <div style="font-weight:700;font-size:13px;">Assistant</div>
+          <div id="assistantReply" style="margin-top:6px;font-size:13px;color:rgba(230,238,248,0.9);">
+            Hello! Click "View Resume" to see the full PDF.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Content -->
+    <div class="content">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h1>Manikandan R</h1>
+          <div class="meta">Embedded Systems • Verilog • IoT • Industrial Automation</div>
+        </div>
+      </div>
+
+      <div class="sections">
+        <div class="chip active" data-section="home">Home</div>
+        <div class="chip" data-section="skills">Skills</div>
+        <div class="chip" data-section="projects">Projects</div>
+        <div class="chip" data-section="education">Education</div>
+        <div class="chip" data-section="experience">Internships and Trainings</div>
+        <div class="chip" data-section="certifications">Certifications</div>
+        <div class="chip" data-section="contact">Contact</div>
+      </div>
+
+      <div id="panels">
+        <!-- HOME -->
+        <div class="panel" data-panel="home">
+          <div style="font-weight:700;">About Me</div>
+          <div style="margin-top:8px;color:rgba(230,238,248,0.9);">
+            A passionate and detail-oriented Electronics and Communication Engineering student with hands-on experience in embedded systems, industrial automation, and core engineering processes.
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="panel" data-panel="skills" style="display:none;">
+          <div style="font-weight:700;margin-bottom:10px;">Technical Skills</div>
+          <div class="skills" id="skillsList"></div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="panel" data-panel="projects" style="display:none;">
+          <div style="font-weight:700;margin-bottom:10px;">Projects</div>
+          <div id="projectsList"></div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="panel" data-panel="education" style="display:none;">
+          <div style="font-weight:700;margin-bottom:10px;">Education</div>
+          <div style="color:rgba(230,238,248,0.9);">
+            <div><strong>Under Graduate</strong> - K Ramakrishnan College of Engineering<br><span style="color:#94a3b8;">CGPA: 7.6 • Expected 2027</span></div>
+            <div style="margin-top:12px;"><strong>Higher Secondary</strong> - Holy Cross Matriculation Hr Sec School<br><span style="color:#94a3b8;">83% • 2023</span></div>
+            <div style="margin-top:12px;"><strong>SSLC</strong> - Holy Cross Matriculation Hr Sec School<br><span style="color:#94a3b8;">All Pass • 2021</span></div>
+          </div>
+        </div>
+
+        <!-- Trainings -->
+        <div class="panel" data-panel="experience" style="display:none;">
+          <div style="font-weight:700;margin-bottom:10px;">Internships and Trainings</div>
+          <div style="color:rgba(230,238,248,0.9);">
+            <strong>Inplant Training</strong><br>
+            <span style="color:#94a3b8;">Ordnance Factory Tiruchirappalli • 2025</span><br>
+            <small>Completed a 15-day training and gained knowledge about PLC, CNC machines and electronic appliances in industries.</small>
+          </div>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="panel" data-panel="certifications" style="display:none;">
+          <div style="font-weight:700;margin-bottom:10px;">Certifications & Workshops</div>
+          <ul style="margin-top:8px;padding-left:18px;color:rgba(230,238,248,0.9);">
+            <li>NPTEL - Analog Circuits and Systems</li>
+            <li>NPTEL - Python for Data Science</li>
+            <li>Workshop - Cybersecurity at NIT</li>
+            <li>IEI Workshop at KRCE</li>
+            <li>VAC - PLC Course at KRCE by SARA Controls and Automation</li>
+            <li>ICAVCNS 2025 - International Conference</li>
+            <li>Inplant Training at OFT</li>
+          </ul>
+        </div>
+
+        <!-- CONTACT (UPDATED - NO ICONS, EMAIL AS MAILTO LINK) -->
+        <div class="panel" data-panel="contact" style="display:none;">
+          <div style="font-weight:700;margin-bottom:10px;">Contact</div>
+
+          <div class="contact-row">
+            <div class="label">Phone</div>
+            <div>+91 7449108782</div>
+          </div>
+          <div style="height:8px"></div>
+
+          <div class="contact-row">
+            <div class="label">Email</div>
+            <div><a href="mailto:vrmanikandan2005@gmail.com" style="color:#3b82f6; text-decoration:none;">vrmanikandan2005@gmail.com</a></div>
+          </div>
+          <div style="height:8px"></div>
+
+          <div class="contact-row">
+            <div class="label">Address</div>
+            <div>5/179-1 Gandhi Nagar, Ettarai, Trichy 639 103</div>
+          </div>
+          <div style="height:8px"></div>
+
+          <div class="contact-row">
+            <div class="label">LinkedIn</div>
+            <a href="https://www.linkedin.com/in/manikandan-r-6153342a4/" style="color:#3b82f6;" target="_blank">
+              linkedin.com/in/manikandan-r-6153342a4
+            </a>
+          </div>
+          <div style="height:8px"></div>
+
+          <div class="contact-row">
+            <div class="label">Github</div>
+            <a href="https://github.com/Manikandan-3" style="color:#3b82f6;" target="_blank">
+              github.com/Manikandan-3
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF RESUME MODAL -->
+  <div class="modal" id="resumeModal">
+    <div class="pdf-container">
+      <div class="close-modal" id="closeModal">X</div>
+      <iframe src="resume.pdf" class="pdf-frame" title="Manikandan R Resume"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const profile = {
+      skills: ['Programming in C, C++, Java', 'Embedded C', 'Verilog', 'Embedded system development', 'Ladder logic', 'Communication skills', 'Critical Thinking'],
+      projects: [
+        { title: 'Smart voting system for pupils', tech: 'Embedded Systems' },
+        { title: 'IoT based gate system', tech: 'IoT, Embedded C' },
+        { title: 'Emergency muting system in vehicles', tech: 'Automotive Electronics' },
+        { title: 'Text based adventure game', tech: 'java Programming' }
+      ]
+    };
+
+    const skillsList = document.getElementById('skillsList');
+    profile.skills.forEach(s => {
+      const el = document.createElement('div'); el.className = 'skill'; el.textContent = s; skillsList.appendChild(el);
+    });
+
+    const projectsList = document.getElementById('projectsList');
+    profile.projects.forEach(p => {
+      const card = document.createElement('div'); card.className = 'project panel';
+      const t = document.createElement('div'); t.className = 'project-title'; t.textContent = p.title; card.appendChild(t);
+      const tech = document.createElement('div'); tech.style = 'font-size:12px;color:rgba(230,238,248,0.68);margin-top:6px;'; tech.textContent = 'Tech: ' + p.tech; card.appendChild(tech);
+      projectsList.appendChild(card);
+    });
+
+    document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      const sec = c.dataset.section;
+      document.querySelectorAll('[data-panel]').forEach(p => p.style.display = (p.dataset.panel === sec) ? '' : 'none');
+      setAssistantReply('Showing ' + sec + ' section.');
+      pulse();
+    }));
+
+    const modal = document.getElementById('resumeModal');
+    const viewBtn = document.getElementById('viewResume');
+    const closeBtn = document.getElementById('closeModal');
+
+    viewBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      setAssistantReply('Resume PDF loaded.');
+      pulse();
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      setAssistantReply('Resume closed.');
+      pulse();
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setAssistantReply('Resume closed.');
+        pulse();
+      }
+    });
+
+    function setAssistantReply(text) {
+      document.getElementById('assistantReply').textContent = text;
+    }
+
+    function pulse() {
+      const b = document.getElementById('assistantBubble');
+      b.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.04)' }, { transform: 'scale(1)' }], { duration: 600, easing: 'ease-in-out' });
+    }
+
+    function openPanel(name) {
+      document.querySelectorAll('[data-panel]').forEach(p => p.style.display = (p.dataset.panel === name) ? '' : 'none');
+      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.section === name));
+    }
+    openPanel('home');
+  </script>
+</body>
+</html>
